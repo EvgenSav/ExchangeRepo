@@ -12,20 +12,46 @@ namespace ExchangeTest.Controllers {
             IEnumerable<Tool> tools = db.Tools;
             IEnumerable<Participant> participants = db.Participants;
             IEnumerable<Transaction> transactions = db.Transactions;
+            
             ViewBag.Tools = tools;
             ViewBag.Participants = participants;
             ViewBag.Transactions = transactions;
-            return View(db.Tools);
+            return View();
         }
-        public ActionResult AddTool(string toolName) {
-            db.Tools.Add(new Tool {Name = toolName });
-            db.SaveChanges();
-            return RedirectToAction("Index");
+        public JsonResult AddTool(string name) {
+            if (name != null) {
+                db.Tools.Add(new Tool { Name = name });
+                db.SaveChanges();
+            }
+            return Json(db.Tools);
+        }
+
+        public JsonResult AddParticipant(string name) {
+            if (name != null) {
+                db.Participants.Add(new Participant { Name = name });
+                db.SaveChanges();
+            }
+            return Json(db.Participants);
+        }
+
+        [HttpPost]
+        public JsonResult AddTransaction(Transaction transaction) {
+            if (transaction != null) {
+                db.Transactions.Add(new Transaction {
+                    ToolId =transaction.ToolId,
+                    BuyerId =transaction.BuyerId,
+                    SellerId =transaction.SellerId,
+                    Price =transaction.Price,
+                    Time = DateTime.Now.Date
+                });
+                db.SaveChanges();
+            }
+            return Json(db.Transactions.OrderBy(new Func<Transaction, DateTime>(key => key.Time)));
         }
         public JsonResult GetData() {
             JsonResult res = new JsonResult();
             res.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
-            res.Data = new { Tools = db.Tools, Participants = db.Participants, Transactions = db.Transactions };
+            res.Data = new { Tools = db.Tools, Participants = db.Participants, Transactions = db.Transactions.OrderBy(new Func<Transaction, DateTime>(key => key.Time)) };
             return res;
         }
 

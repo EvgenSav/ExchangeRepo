@@ -207,3 +207,4 @@ d:\Dropbox\VisualStudioProjects\Projects\ExchangeTest\ExchangeTest\obj\Debug\Exc
 d:\Dropbox\VisualStudioProjects\Projects\ExchangeTest\ExchangeTest\obj\Debug\ExchangeTest.dll
 d:\Dropbox\VisualStudioProjects\Projects\ExchangeTest\ExchangeTest\obj\Debug\ExchangeTest.pdb
 d:\Dropbox\VisualStudioProjects\Projects\ExchangeTest\ExchangeTest\obj\Debug\ExchangeTest.csprojAssemblyReference.cache
+C:\Users\Evgen\Dropbox\VisualStudioProjects\Projects\ExchangeTest\ExchangeTest\obj\Debug\ExchangeTest.csprojAssemblyReference.cache

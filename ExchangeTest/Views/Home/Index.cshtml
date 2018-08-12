@@ -19,6 +19,10 @@
             }
         </tbody>
     </table>
+    <div class="input-group">
+        <input type="text" ng-model="main.toolName" placeholder="Currrency name to add" class="form-control" />
+        <input type="button" ng-click="main.AddTool(main.toolName)" class="btn-success form-control" value="Add tool" />
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -35,6 +39,10 @@
             }
         </tbody>
     </table>
+    <div class="input-group">
+        <input type="text" ng-model="main.participantName" placeholder="Participant name to add" class="form-control" />
+        <input type="button" ng-click="main.AddParticipant(main.participantName)" class="btn-success form-control" value="Add participant" />
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -61,11 +69,22 @@
             }
         </tbody>
     </table>
-    <div class="input-group">
-        <input type="text" ng-model="main.toolName" placeholder="Currrency name to add" class="form-control" />
-        <input type="button" ng-click="main.AddTool(main.toolName)" class="btn-success form-control" value="Add tool" />
-        <input type="button" ng-click="main.DrawGraph(main.myFactory.Transactions)" class="btn-danger form-control" value="Draw Graph" />
+    <div class="input-group" ng-model="main.newTransaction">
+        <select ng-model="main.newTransaction.selectedTool" ng-options="tool.Name for tool in main.myFactory.Tools" class="form-control"></select>
+        <select ng-model="main.newTransaction.selectedBuyer" ng-options="participant.Name for participant in main.myFactory.Participants" class="form-control"></select>
+        <select ng-model="main.newTransaction.selectedSeller" ng-options="participant.Name for participant in main.myFactory.Participants" class="form-control"></select>
+        <input type="number" ng-model="main.newTransaction.price" placeholder="Enter exchange price" class="form-control"/>
+        <input type="number" ng-model="main.newTransaction.amount" placeholder="Enter exchange amount" class="form-control"/>
     </div>
+    <div class="input-group">
+        <input type="button" ng-click="main.AddTransaction(main.newTransaction)" class="form-control" value="Add exchange"/>
+    </div>
+
+
+    <div class="input-group">
+        <input type="button" ng-click="main.myFactory.DrawGraph(main.myFactory.Transactions)" class="btn-danger form-control" value="Draw Graph" />
+    </div>
+
     <canvas id="myChart"></canvas>
     <div ng-repeat="transaction in main.myFactory.Transactions track by transaction.Id">
         <p>{{transaction.Id}}</p>
