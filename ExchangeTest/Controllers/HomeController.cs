@@ -22,6 +22,12 @@ namespace ExchangeTest.Controllers {
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        public JsonResult GetData() {
+            JsonResult res = new JsonResult();
+            res.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+            res.Data = new { Tools = db.Tools, Participants = db.Participants, Transactions = db.Transactions };
+            return res;
+        }
 
         public ActionResult About() {
             ViewBag.Message = "Your application description page.";
