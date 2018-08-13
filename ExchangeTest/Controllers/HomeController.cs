@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ExchangeTest.Models;
+using ExchangeTest.ViewModels;
 
 namespace ExchangeTest.Controllers {
     public class HomeController : Controller {
@@ -12,10 +13,24 @@ namespace ExchangeTest.Controllers {
             IEnumerable<Tool> tools = db.Tools;
             IEnumerable<Participant> participants = db.Participants;
             IEnumerable<Transaction> transactions = db.Transactions;
-            
+
             ViewBag.Tools = tools;
             ViewBag.Participants = participants;
             ViewBag.Transactions = transactions;
+
+            List<TransactionViewModel> transactionsView = new List<TransactionViewModel>();
+            //foreach (var ts in transactions) {
+            //    string tooLname = tools.FirstOrDefault(t => t.Id == ts.ToolId).Name;
+            //    transactionsView.Add(new TransactionViewModel {
+            //        Id = ts.Id,
+            //        BuyerName = participants.FirstOrDefault(b => b.Id == ts.BuyerId).Name,
+            //        SellerName = participants.FirstOrDefault(s => s.Id == ts.SellerId).Name,
+            //        Price = ts.Price + tooLname,
+            //        Amount = ts.Amount + tooLname,
+            //        Time = ts.Time.ToShortTimeString()
+            //    });
+            //}
+            //ViewBag.TransactionsViews = transactionsView;
             return View();
         }
         public JsonResult AddTool(string name) {
@@ -34,19 +49,19 @@ namespace ExchangeTest.Controllers {
             return Json(db.Participants);
         }
 
-        [HttpPost]
         public JsonResult AddTransaction(Transaction transaction) {
             if (transaction != null) {
                 db.Transactions.Add(new Transaction {
-                    ToolId =transaction.ToolId,
-                    BuyerId =transaction.BuyerId,
-                    SellerId =transaction.SellerId,
-                    Price =transaction.Price,
-                    Time = DateTime.Now.Date
+                    ToolId = transaction.ToolId,
+                    BuyerId = transaction.BuyerId,
+                    SellerId = transaction.SellerId,
+                    Price = transaction.Price,
+                    Amount = transaction.Amount,
+                    Time = DateTime.Now
                 });
                 db.SaveChanges();
             }
-            return Json(db.Transactions.OrderBy(new Func<Transaction, DateTime>(key => key.Time)));
+            return Json(db.Transactions.OrderByDescending(a => a.Id).FirstOrDefault());
         }
         public JsonResult GetData() {
             JsonResult res = new JsonResult();

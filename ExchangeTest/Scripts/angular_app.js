@@ -1,57 +1,63 @@
 ﻿var app = angular.module("app", []);
 app.factory("myFactory", function () {
-    var transactionsPrices = [];
-    var transactionsIds = [];
-    let chart;
-    let data = {
-        labels: transactionsIds,
-        datasets: [{
-            label: "My First dataset",
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: transactionsPrices
-        }]
-    };
-    let options = {};
+    let transactions;
     return {
         Tools: [],
         Participants: [],
-        get Transactions() {
-            return this.transactions;
-        },
-        set Transactions(value) {
-            this.transactions = value;
-            for (let i = 0; i < this.transactions.length; i++) {
-                transactionsPrices.push(this.transactions[i].Price);
-            }
-            for (let i = 0; i < this.transactions.length; i++) {
-                transactionsIds.push(this.transactions[i].Time);
-            }
-        },
-        DrawGraph: function (transactions) {
-            var ctx = document.getElementById('myChart').getContext('2d');
-
-            chart = new Chart(ctx, {
-                // The type of chart we want to create
-                type: 'line',
-
-                // The data for our dataset
-                data: data,
-                // Configuration options go here
-                options: options
-            });
-        },
-        UpdateGraph: function () {
-            let grlength = chart.data.datasets[0].data.length;
-            chart.data.datasets[0].data = transactionsPrices;
-            chart.data.labels = transactionsIds;
-            chart.update();
-        }
+        Transactions: [],
+        TransactionPrice: [],
+        TransactionTime: []
     };
 });
 app.controller("mainController", function ($http, myFactory) {
+    let chart;
+    let chartData = {
+        labels: [],
+        datasets: [{
+            label: "Transaction price",
+            //backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: []
+        }]
+    };
+    
+
+    DrawGraph = function () {
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+        chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+            // The data for our dataset
+            data: chartData,
+            // Configuration options go here
+            options: {
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            displayFormats: {
+                                day: 'MMM D'
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+        chart.data.datasets[0].data = myFactory.TransactionPrice;
+        chart.data.labels = myFactory.TransactionTime;
+        chart.update();
+    }
+
+    UpdateGraph = function () {
+        chart.data.datasets[0].data = myFactory.TransactionPrice;
+        chart.data.labels = myFactory.TransactionTime;
+        chart.update();
+    }
+    let options = {};
     this.myFactory = myFactory;
-    this.GetData = function () {
+    this.InitApp = function () {
         $http.get(`http://${document.location.host}/Home/GetData`).then(
             function successCallback(response) {
                 console.log(response.data);
@@ -62,8 +68,14 @@ app.controller("mainController", function ($http, myFactory) {
                 for (var i = 0; i < response.data.Transactions.length; i++) {
                     myFactory.Transactions[i].Time = moment(response.data.Transactions[i].Time).toDate();
                 }
+                //prepare data for chart
+                var arr = myFactory.Transactions;
+                arr.forEach(function (ts, i, arr) {
+                    myFactory.TransactionTime.push(ts.Time);
+                    myFactory.TransactionPrice.push(ts.Price);
+                });
+                DrawGraph();
             }, function errorCallback(response) {
-
             }
         );
     };
@@ -84,30 +96,26 @@ app.controller("mainController", function ($http, myFactory) {
         );
     };
     this.AddTransaction = function (transaction) {
-        console.log(transaction.selectedTool.Name);
-        console.log(transaction.selectedBuyer.Name);
-        console.log(transaction.selectedSeller.Name);
-        console.log(transaction.price);
-        console.log(transaction.amount);
-        let data = {
+        let tsData = {
             ToolId: transaction.selectedTool.Id,
             BuyerId: transaction.selectedBuyer.Id,
             SellerId: transaction.selectedSeller.Id,
             Price: transaction.price,
             Amount: transaction.amount
         }
-        $http.post(`http://${document.location.host}/Home/AddTransaction/`,transaction).then(
+        $http.post(`http://${document.location.host}/Home/AddTransaction/`, tsData).then(
             function successCallback(response) {
                 console.log(response.data);
-                myFactory.Transactions = response.data;
+                myFactory.Transactions[response.data.Id] = response.data;
                 //convert datetime to date js using moment
-                for (var i = 0; i < response.data.length; i++) {
-                    myFactory.Transactions[i].Time = moment(response.data[i].Time).toDate();
-                }
-                myFactory.UpdateGraph();
+                myFactory.Transactions[response.data.Id].Time = moment(response.data.Time).toDate();
+
+                myFactory.TransactionTime.push(myFactory.Transactions[response.data.Id].Time);
+                myFactory.TransactionPrice.push(myFactory.Transactions[response.data.Id].Price);
+
+                UpdateGraph();
             }, function errorCallbasck(response) {
             }
         );
     };
-
 });
