@@ -191,9 +191,9 @@ app.controller("anotherController", function ($http, myFactory) {
 
     this.AddTransaction = function (transaction) {
         let tsData = {
-            ToolId: transaction.selectedTool.Id,
-            BuyerId: transaction.selectedBuyer.Id,
-            SellerId: transaction.selectedSeller.Id,
+            Tool: transaction.selectedTool,
+            Buyer: transaction.selectedBuyer,
+            Seller: transaction.selectedSeller,
             Price: transaction.price,
             Amount: transaction.amount
         }

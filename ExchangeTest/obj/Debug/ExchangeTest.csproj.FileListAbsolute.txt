@@ -207,7 +207,6 @@ d:\Dropbox\VisualStudioProjects\Projects\ExchangeTest\ExchangeTest\obj\Debug\Exc
 d:\Dropbox\VisualStudioProjects\Projects\ExchangeTest\ExchangeTest\obj\Debug\ExchangeTest.dll
 d:\Dropbox\VisualStudioProjects\Projects\ExchangeTest\ExchangeTest\obj\Debug\ExchangeTest.pdb
 d:\Dropbox\VisualStudioProjects\Projects\ExchangeTest\ExchangeTest\obj\Debug\ExchangeTest.csprojAssemblyReference.cache
-C:\Users\Evgen\Dropbox\VisualStudioProjects\Projects\ExchangeTest\ExchangeTest\obj\Debug\ExchangeTest.csprojAssemblyReference.cache
 C:\Users\w1shl\Dropbox\VisualStudioProjects\Projects\ExchangeRepo\ExchangeTest\bin\ApplicationInsights.config
 C:\Users\w1shl\Dropbox\VisualStudioProjects\Projects\ExchangeRepo\ExchangeTest\bin\ExchangeTest.dll.config
 C:\Users\w1shl\Dropbox\VisualStudioProjects\Projects\ExchangeRepo\ExchangeTest\bin\ExchangeTest.dll
@@ -314,3 +313,5 @@ C:\Users\w1shl\Dropbox\VisualStudioProjects\Projects\ExchangeRepo\ExchangeTest\o
 C:\Users\w1shl\Dropbox\VisualStudioProjects\Projects\ExchangeRepo\ExchangeTest\obj\Debug\ExchangeTest.dll
 C:\Users\w1shl\Dropbox\VisualStudioProjects\Projects\ExchangeRepo\ExchangeTest\obj\Debug\ExchangeTest.pdb
 C:\Users\w1shl\Dropbox\VisualStudioProjects\Projects\ExchangeRepo\ExchangeTest\obj\Debug\ExchangeTest.csprojAssemblyReference.cache
+c:\Users\Evgen\Dropbox\VisualStudioProjects\Projects\ExchangeTest\ExchangeTest\bin\ru\EntityFramework.SqlServer.resources.dll
+C:\Users\Evgen\Dropbox\VisualStudioProjects\Projects\ExchangeTest\ExchangeTest\obj\Debug\ExchangeTest.csprojAssemblyReference.cache

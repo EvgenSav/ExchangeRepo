@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Home Page";
 }
 <h2 class="text-center my-lg-3">Razor view</h2>
@@ -7,26 +8,12 @@
     <script>
         var barChartData =
             {
-                labels: [
-                    @foreach(var dotx in ViewBag.dataX) {
-                            @dotx
-                        }
-                ], //the names displayed on the x-axis, see images below
+                labels:  @Html.Raw(ViewBag.dataX),          //the names displayed on the x-axis, see images below
                 datasets: [{
-                    label: 'ProductWise Sales Count',
-                    backgroundColor: [
-                        "#f990a7",
-                        "#aad2ed",
-                        "#9966FF",
-                        "#99e5e5",
-                        "#f7bd83",
-                    ],
-                    borderWidth: 2,
-                    data: [
-                        @foreach(var doty in ViewBag.dataY) {
-                            @doty
-                        }
-                        ]  //what you returned back from controller. values displayed on the y-axis, see images below
+                    data: @Html.Raw(ViewBag.dataY),
+                    label: "Transaction price",
+                    //backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)'
                 }]
             };
 
@@ -34,17 +21,21 @@
                 var ctx1 = document.getElementById("myChartRazor").getContext("2d");
                 window.myBar = new Chart(ctx1,
                     {
-                        type: 'bar',
+                        type: 'line',
                         data: barChartData,
                         options:
                             {
-                                title:
-                                {
-                                    display: true,
-                                    text: "ProductWise Sales Count"
-                                },
-                                responsive: true,
-                                maintainAspectRatio: true
+                                scales: {
+                                    xAxes: [{
+                                        type: 'time',
+                                        time: {
+                                            unit: 'day',
+                                            displayFormats: {
+                                                day: 'MMM D'
+                                            }
+                                        }
+                                    }]
+                                }
                             }
                     });
             }

@@ -36,7 +36,7 @@
                 </table>
             </div>
         </div>
-        <div class="input-group" ng-model="another.newTransaction">
+        <div class="input-group my-3" ng-model="another.newTransaction">
             <select ng-model="another.newTransaction.selectedTool" ng-options="tool.Name for tool in another.myFactory.Tools" class="form-control"></select>
             <select ng-model="another.newTransaction.selectedBuyer" ng-options="participant.Name for participant in another.myFactory.Participants" class="form-control"></select>
             <select ng-model="another.newTransaction.selectedSeller" ng-options="participant.Name for participant in another.myFactory.Participants" class="form-control"></select>

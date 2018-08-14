@@ -17,12 +17,11 @@ namespace ExchangeTest.Controllers {
             ViewBag.Tools = tools;
             ViewBag.Participants = participants;
             ViewBag.Transactions = transactions;
-            List<string> times = transactions.Select(t => t.Time.Date.ToShortDateString()).ToList();
-            List<string> prices = transactions.Select(p => p.Price.ToString()).ToList();
-            
-            ViewBag.dataY = prices;
-            //ViewBag.ObjectName = ;
-            ViewBag.dataX = times;
+            List<DateTime> times = transactions.Select(t => t.Time.Date).ToList();
+            List<decimal> prices = transactions.Select(p => p.Price).ToList();
+
+            ViewBag.dataY = JsonConvert.SerializeObject(prices);
+            ViewBag.dataX = JsonConvert.SerializeObject(times);
 
             return View();
         }
@@ -45,19 +44,19 @@ namespace ExchangeTest.Controllers {
             return Json(db.Participants);
         }
 
-        public JsonResult AddTransaction(Transaction transaction) {
-            if (transaction != null) {
+        public string AddTransaction(Transaction transaction) {
+            if (transaction.Seller != null && transaction.Buyer != null && transaction.Tool != null && transaction.Buyer.Id != transaction.Seller.Id) {
                 db.Transactions.Add(new Transaction {
-                    ToolId = transaction.ToolId,
-                    BuyerId = transaction.BuyerId,
-                    SellerId = transaction.SellerId,
+                    ToolId = transaction.Tool.Id,
+                    BuyerId = transaction.Buyer.Id,
+                    SellerId = transaction.Seller.Id,
                     Price = transaction.Price,
                     Amount = transaction.Amount,
                     Time = DateTime.Now
                 });
                 db.SaveChanges();
             }
-            return Json(db.Transactions.OrderByDescending(a => a.Id).FirstOrDefault());
+            return JsonConvert.SerializeObject(db.Transactions.ToList());
         }
 
         public string GetData() {
@@ -67,7 +66,7 @@ namespace ExchangeTest.Controllers {
             return JsonConvert.SerializeObject(new { Tools = tools, Participants = participants, Transactions = transactions }); ;
         }
 
-        
+
 
         public ActionResult About() {
             ViewBag.Message = "Your application description page.";
