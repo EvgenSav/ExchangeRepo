@@ -1,92 +1,136 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-@Model ExchangeTest.ViewModels.TransactionViewModel
+<h2 class="text-center my-lg-3">Razor view</h2>
+<div class="container" ng-controller="mainController as main">
 
-<div class="container" ng-init="main.InitApp()">
+    <script>
+        var barChartData =
+            {
+                labels: [
+                    @foreach(var dotx in ViewBag.dataX) {
+                            @dotx
+                        }
+                ], //the names displayed on the x-axis, see images below
+                datasets: [{
+                    label: 'ProductWise Sales Count',
+                    backgroundColor: [
+                        "#f990a7",
+                        "#aad2ed",
+                        "#9966FF",
+                        "#99e5e5",
+                        "#f7bd83",
+                    ],
+                    borderWidth: 2,
+                    data: [
+                        @foreach(var doty in ViewBag.dataY) {
+                            @doty
+                        }
+                        ]  //what you returned back from controller. values displayed on the y-axis, see images below
+                }]
+            };
 
-    <canvas id="myChart"></canvas>
-    <div class="input-group">
-        <div>
-            <input type="button" data-target="#toHide" data-toggle="collapse" class="form-control btn-success" value="Show info" />
-        </div>
+            window.onload = function () {
+                var ctx1 = document.getElementById("myChartRazor").getContext("2d");
+                window.myBar = new Chart(ctx1,
+                    {
+                        type: 'bar',
+                        data: barChartData,
+                        options:
+                            {
+                                title:
+                                {
+                                    display: true,
+                                    text: "ProductWise Sales Count"
+                                },
+                                responsive: true,
+                                maintainAspectRatio: true
+                            }
+                    });
+            }
+    </script>
+    <div class="center-block">
+        <canvas id="myChartRazor"></canvas>
     </div>
+
+    <div class="center-block my-5">
+        <input type="button" data-target="#toHide" data-toggle="collapse" class="form-control btn-success" value="Show transactions table" />
+    </div>
+
+
     <div id="toHide" class="collapse">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Currency name</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var tool in ViewBag.Tools) {
+        @*<table class="table">
+                <thead>
                     <tr>
-                        <th scope="row">@tool.Id</th>
-                        <td>@tool.Name</td>
+                        <th scope="col">#</th>
+                        <th scope="col">Currency name</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-        <div class="input-group">
-            <input type="text" ng-model="main.toolName" placeholder="Currrency name to add" class="form-control" />
-            <input type="button" ng-click="main.AddTool(main.toolName)" class="btn-success form-control" value="Add tool" />
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Participant name</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var participant in ViewBag.Participants) {
+                </thead>
+                <tbody>
+                    @foreach (var tool in ViewBag.Tools) {
+                        <tr>
+                            <th scope="row">@tool.Id</th>
+                            <td>@tool.Name</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>*@
+        @*<div class="input-group">
+                <input type="text" ng-model="main.toolName" placeholder="Currrency name to add" class="form-control" />
+                <input type="button" ng-click="main.AddTool(main.toolName)" class="btn-success form-control" value="Add tool" />
+            </div>*@
+        @*<table class="table">
+                <thead>
                     <tr>
-                        <th scope="row">@participant.Id</th>
-                        <td>@participant.Name</td>
+                        <th scope="col">#</th>
+                        <th scope="col">Participant name</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-        <div class="input-group">
-            <input type="text" ng-model="main.participantName" placeholder="Participant name to add" class="form-control" />
-            <input type="button" ng-click="main.AddParticipant(main.participantName)" class="btn-success form-control" value="Add participant" />
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Currency</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Buyer</th>
-                    <th scope="col">Seller</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var transaction in ViewBag.Transactions) {
-                    <tr>
-                        <th scope="row">@transaction.Id</th>
-                        <td>@transaction.ToolId</td>
-                        <td>@transaction.Price</td>
-                        <td>@transaction.Amount</td>
-                        <td>@transaction.Time</td>
-                        <td>@transaction.BuyerId</td>
-                        <td>@transaction.SellerId</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <div class="input-group" ng-model="main.newTransaction">
-            <select ng-model="main.newTransaction.selectedTool" ng-options="tool.Name for tool in main.myFactory.Tools" class="form-control"></select>
-            <select ng-model="main.newTransaction.selectedBuyer" ng-options="participant.Name for participant in main.myFactory.Participants" class="form-control"></select>
-            <select ng-model="main.newTransaction.selectedSeller" ng-options="participant.Name for participant in main.myFactory.Participants" class="form-control"></select>
-            <input type="number" ng-model="main.newTransaction.price" placeholder="Enter exchange price" class="form-control" />
-            <input type="number" ng-model="main.newTransaction.amount" placeholder="Enter exchange amount" class="form-control" />
-        </div>
-        <div class="input-group">
-            <input type="button" ng-click="main.AddTransaction(main.newTransaction)" class="form-control" value="Add exchange" />
+                </thead>
+                <tbody>
+                    @foreach (var participant in ViewBag.Participants) {
+                        <tr>
+                            <th scope="row">@participant.Id</th>
+                            <td>@participant.Name</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>*@
+        @*<div class="input-group">
+                <input type="text" ng-model="main.participantName" placeholder="Participant name to add" class="form-control" />
+                <input type="button" ng-click="main.AddParticipant(main.participantName)" class="btn-success form-control" value="Add participant" />
+            </div>*@
+        <div class="card">
+            <div class="card-header bg-info">
+                <h3 class="text-center">Transactions info</h3>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Currency</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Buyer</th>
+                            <th scope="col">Seller</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var transaction in ViewBag.Transactions) {
+                            <tr>
+                                <th scope="row">@transaction.Id</th>
+                                <td>@transaction.Tool.Name</td>
+                                <td>@transaction.Price @transaction.Tool.Name</td>
+                                <td>@transaction.Amount @transaction.Tool.Name</td>
+                                <td>@transaction.Time</td>
+                                <td>@transaction.Buyer.Name</td>
+                                <td>@transaction.Seller.Name</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

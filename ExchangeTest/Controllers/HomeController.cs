@@ -4,33 +4,29 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ExchangeTest.Models;
-using ExchangeTest.ViewModels;
+using Newtonsoft.Json;
 
 namespace ExchangeTest.Controllers {
     public class HomeController : Controller {
         ExchangeContext db = new ExchangeContext();
         public ActionResult Index() {
-            IEnumerable<Tool> tools = db.Tools;
-            IEnumerable<Participant> participants = db.Participants;
-            IEnumerable<Transaction> transactions = db.Transactions;
+            IEnumerable<Tool> tools = db.Tools.ToList();
+            IEnumerable<Participant> participants = db.Participants.ToList();
+            IEnumerable<Transaction> transactions = db.Transactions.ToList();
 
             ViewBag.Tools = tools;
             ViewBag.Participants = participants;
             ViewBag.Transactions = transactions;
+            List<string> times = transactions.Select(t => t.Time.Date.ToShortDateString()).ToList();
+            List<string> prices = transactions.Select(p => p.Price.ToString()).ToList();
+            
+            ViewBag.dataY = prices;
+            //ViewBag.ObjectName = ;
+            ViewBag.dataX = times;
 
-            List<TransactionViewModel> transactionsView = new List<TransactionViewModel>();
-            //foreach (var ts in transactions) {
-            //    string tooLname = tools.FirstOrDefault(t => t.Id == ts.ToolId).Name;
-            //    transactionsView.Add(new TransactionViewModel {
-            //        Id = ts.Id,
-            //        BuyerName = participants.FirstOrDefault(b => b.Id == ts.BuyerId).Name,
-            //        SellerName = participants.FirstOrDefault(s => s.Id == ts.SellerId).Name,
-            //        Price = ts.Price + tooLname,
-            //        Amount = ts.Amount + tooLname,
-            //        Time = ts.Time.ToShortTimeString()
-            //    });
-            //}
-            //ViewBag.TransactionsViews = transactionsView;
+            return View();
+        }
+        public ActionResult AjaxView() {
             return View();
         }
         public JsonResult AddTool(string name) {
@@ -63,12 +59,15 @@ namespace ExchangeTest.Controllers {
             }
             return Json(db.Transactions.OrderByDescending(a => a.Id).FirstOrDefault());
         }
-        public JsonResult GetData() {
-            JsonResult res = new JsonResult();
-            res.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
-            res.Data = new { Tools = db.Tools, Participants = db.Participants, Transactions = db.Transactions.OrderBy(new Func<Transaction, DateTime>(key => key.Time)) };
-            return res;
+
+        public string GetData() {
+            List<Tool> tools = db.Tools.ToList();
+            List<Participant> participants = db.Participants.ToList();
+            List<Transaction> transactions = db.Transactions.ToList();
+            return JsonConvert.SerializeObject(new { Tools = tools, Participants = participants, Transactions = transactions }); ;
         }
+
+        
 
         public ActionResult About() {
             ViewBag.Message = "Your application description page.";

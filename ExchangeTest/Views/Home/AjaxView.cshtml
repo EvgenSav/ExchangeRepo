@@ -1,0 +1,50 @@
+﻿<h2 class="text-center my-lg-3">Ajax view</h2>
+<div ng-controller="anotherController as another" ng-init="another.InitApp()">
+    <canvas id="myChart2"></canvas>
+    <div class="center-block my-5">
+        <input type="button" data-target="#toHide2" data-toggle="collapse" class="form-control btn-success" value="Show transactions table" />
+    </div>
+    <div id="toHide2" class="collapse">
+        <div class="card">
+            <div class="card-header bg-info">
+                <h3 class="text-center">Transactions info</h3>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Currency</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Buyer</th>
+                            <th scope="col">Seller</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="transaction in another.myFactory.Transactions track by transaction.Id">
+                        <tr>
+                            <th scope="row">{{transaction.Id}}</th>
+                            <td>{{transaction.Tool.Name}}</td>
+                            <td>{{transaction.Price}} {{transaction.Tool.Name}}</td>
+                            <td>{{transaction.Amount}} {{transaction.Tool.Name}}</td>
+                            <td>{{transaction.Time}}</td>
+                            <td>{{transaction.Buyer.Name}}</td>
+                            <td>{{transaction.Seller.Name}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="input-group" ng-model="another.newTransaction">
+            <select ng-model="another.newTransaction.selectedTool" ng-options="tool.Name for tool in another.myFactory.Tools" class="form-control"></select>
+            <select ng-model="another.newTransaction.selectedBuyer" ng-options="participant.Name for participant in another.myFactory.Participants" class="form-control"></select>
+            <select ng-model="another.newTransaction.selectedSeller" ng-options="participant.Name for participant in another.myFactory.Participants" class="form-control"></select>
+            <input type="number" ng-model="another.newTransaction.price" placeholder="Enter exchange price" class="form-control" />
+            <input type="number" ng-model="another.newTransaction.amount" placeholder="Enter exchange amount" class="form-control" />
+        </div>
+        <div class="input-group">
+            <input type="button" ng-click="another.AddTransaction(another.newTransaction)" class="form-control btn-success" value="Add transaction" />
+        </div>
+    </div>
+</div>
