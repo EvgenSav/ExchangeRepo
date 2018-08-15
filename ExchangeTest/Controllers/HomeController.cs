@@ -22,19 +22,17 @@ namespace ExchangeTest.Controllers {
             List<decimal> prices = new List<decimal>(); ;
 
             if (SelectedToolId == 0) {
-                times = transactions.Select(t => t.Time.Date).ToList();
-                prices = transactions.Select(p => p.Price).ToList();
-                ViewBag.dataY = JsonConvert.SerializeObject(0);
-                ViewBag.dataX = JsonConvert.SerializeObject(0);
+                times = transactions.Where(tl => tl.ToolId == 1).Select(t => t.Time.Date).ToList();
+                prices = transactions.Where(tl => tl.ToolId == 1).Select(p => p.Price).ToList();  
             } else {
                 times = db.Transactions.Where(t => t.ToolId == SelectedToolId).Select(t => t.Time).ToList();
                 prices = db.Transactions.Where(t => t.ToolId == SelectedToolId).Select(p => p.Price).ToList();
-                ViewBag.dataY = JsonConvert.SerializeObject(prices);
-                ViewBag.dataX = JsonConvert.SerializeObject(times);
             }
+            ViewBag.dataY = JsonConvert.SerializeObject(prices);
+            ViewBag.dataX = JsonConvert.SerializeObject(times);
+
             SelectList ToolsList = new SelectList(tools, "Id", "Name", SelectedToolId);
             ViewBag.ToolsList = ToolsList;
-
             return View();
         }
 
@@ -95,20 +93,15 @@ namespace ExchangeTest.Controllers {
             List<Transaction> transactions = db.Transactions.ToList();
             return JsonConvert.SerializeObject(new { Tools = tools, Participants = participants, Transactions = transactions }); ;
         }
+
+        public string GetChartData(int toolId) {
+            List<Transaction> transactions = new List<Transaction>();
+            if (toolId > 0) {
+                transactions = db.Transactions.Where(t => t.ToolId == toolId).ToList();
+            }
+            return JsonConvert.SerializeObject(transactions);
+        }
         //------------------------------------------
-
-
-        public ActionResult About() {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact() {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
         protected override void Dispose(bool disposing) {
             db.Dispose();
             base.Dispose(disposing);

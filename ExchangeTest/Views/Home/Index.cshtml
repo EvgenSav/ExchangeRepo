@@ -4,13 +4,17 @@
 }
 <h2 class="text-center my-lg-3">Razor view</h2>
 
-<div class="input-group">
-    @using (Html.BeginForm("SelectTool", "Home")) {
-        @Html.DropDownList("Id", ViewBag.ToolsList as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
-    }
-</div>
+
+
 
 <div class="container">
+
+    <form action="/Home/SelectTool" method="post" class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Tool for chart</span>
+        </div>
+        @Html.DropDownList("Id", ViewBag.ToolsList as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
+    </form>
 
     <script>
         var barChartData =

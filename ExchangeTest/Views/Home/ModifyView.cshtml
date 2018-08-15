@@ -1,33 +1,33 @@
-﻿<div class="container" ng-controller="mainController as main" ng-init="main.InitApp()">
+﻿<div class="container" ng-controller="modifyController as mod" ng-init="mod.InitApp()">
     <h3 class="text-center">Modify DB</h3>
     <div class="input-group my-3">
-        <input type="text" ng-model="main.toolName" placeholder="Currrency name to add" class="form-control" />
-        <input type="button" ng-click="main.AddTool(main.toolName)" class="btn-success form-control" value="Add tool" />
+        <input type="text" ng-model="mod.toolName" placeholder="Currrency name to add" class="form-control" />
+        <input type="button" ng-click="mod.AddTool(mod.toolName)" class="btn-success form-control" value="Add tool" />
     </div>
 
     <div class="input-group my-3">
-        <input type="text" ng-model="main.participantName" placeholder="Participant name to add" class="form-control" />
-        <input type="button" ng-click="main.AddParticipant(main.participantName)" class="btn-success form-control" value="Add participant" />
+        <input type="text" ng-model="mod.participantName" placeholder="Participant name to add" class="form-control" />
+        <input type="button" ng-click="mod.AddParticipant(mod.participantName)" class="btn-success form-control" value="Add participant" />
     </div>
 
-    <div class="input-group my-3" ng-model="main.newTransaction">
+    <div class="input-group my-3" ng-model="mod.newTransaction">
         <div class="input-group-prepend">
             <span class="input-group-text" id="tool">Tool</span>
         </div>
-        <select ng-model="main.newTransaction.selectedTool" ng-options="tool.Name for tool in main.myFactory.Tools" class="form-control" aria-describedby="tool"></select>
+        <select ng-model="mod.newTransaction.selectedTool" ng-options="tool.Name for tool in mod.myFactory.Tools" class="form-control" aria-describedby="tool"></select>
         <div class="input-group-prepend">
             <span class="input-group-text" id="buyer">Buyer</span>
         </div>
-        <select ng-model="main.newTransaction.selectedBuyer" ng-options="participant.Name for participant in main.myFactory.Participants" class="form-control" aria-describedby="buyer"></select>
+        <select ng-model="mod.newTransaction.selectedBuyer" ng-options="participant.Name for participant in mod.myFactory.Participants" class="form-control" aria-describedby="buyer"></select>
         <div class="input-group-prepend">
             <span class="input-group-text" id="seller">Seller</span>
         </div>
-        <select ng-model="main.newTransaction.selectedSeller" ng-options="participant.Name for participant in main.myFactory.Participants" class="form-control" aria-describedby="seller"></select>
-        <input type="number" ng-model="main.newTransaction.price" placeholder="Enter exchange price" class="form-control" />
-        <input type="number" ng-model="main.newTransaction.amount" placeholder="Enter exchange amount" class="form-control" />
+        <select ng-model="mod.newTransaction.selectedSeller" ng-options="participant.Name for participant in mod.myFactory.Participants" class="form-control" aria-describedby="seller"></select>
+        <input type="number" ng-model="mod.newTransaction.price" placeholder="Price" class="form-control" />
+        <input type="number" ng-model="mod.newTransaction.amount" placeholder="Amount" class="form-control" />
     </div>
     <div class="input-group">
-        <input type="button" ng-click="main.AddTransaction(main.newTransaction)" class="form-control btn-success" value="Add transaction" />
+        <input type="button" ng-click="mod.AddTransaction(mod.newTransaction)" class="form-control btn-success" value="Add transaction" />
     </div>
 
     <div class="card my-5">
@@ -47,7 +47,7 @@
                         <th scope="col">Seller</th>
                     </tr>
                 </thead>
-                <tbody ng-repeat="transaction in main.myFactory.Transactions track by transaction.Id">
+                <tbody ng-repeat="transaction in mod.myFactory.Transactions track by transaction.Id">
                     <tr>
                         <th scope="row">{{transaction.Id}}</th>
                         <td>{{transaction.Tool.Name}}</td>

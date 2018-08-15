@@ -2,6 +2,7 @@
 app.factory("myFactory", function () {
     let transactions;
     return {
+        SelectedTool: {},
         Tools: [],
         Participants: [],
         Transactions: [],
@@ -9,7 +10,7 @@ app.factory("myFactory", function () {
         TransactionTime: []
     };
 });
-app.controller("mainController", function ($http, myFactory) {
+app.controller("modifyController", function ($http, myFactory) {
     this.myFactory = myFactory;
     let ParseTimeData = function () {
         //adjust datetime like in RazorView
@@ -69,11 +70,28 @@ app.controller("mainController", function ($http, myFactory) {
     };
 });
 app.controller("anotherController", function ($http, myFactory) {
+    
     this.myFactory = myFactory;
-    let ParseChartData = function (transactions) {
+    this.ChangeTool = function (tool) {
+        console.log(tool);
+        myFactory.TransactionPrice = [];
+        myFactory.TransactionTime = [];
+        $http.get(`http://${document.location.host}/Home/GetChartData?toolId=${tool.Id}`).then(
+            function successCallback(response) {
+                console.log(response.data);
+                ParseChartData(response.data, myFactory.SelectedTool);
+                UpdateGraph();
+            }, function errorCallback(response) {
+
+            });
+    };
+    let ParseChartData = function (transactions, selectedTool) {
         transactions.forEach(function (ts, i, transactions) {
-            myFactory.TransactionTime.push(ts.Time);
-            myFactory.TransactionPrice.push(ts.Price);
+            //filtering data for charting transactions for selected tool
+            if (ts.Tool.Id == selectedTool.Id) {
+                myFactory.TransactionTime.push(ts.Time);
+                myFactory.TransactionPrice.push(ts.Price);
+            }
         });
     };
 
@@ -85,7 +103,7 @@ app.controller("anotherController", function ($http, myFactory) {
             myFactory.Transactions[i].TimeF = time;
         }
     };
-    
+
     this.InitApp = function () {
         $http.get(`http://${document.location.host}/Home/GetData`).then(
             function successCallback(response) {
@@ -95,11 +113,13 @@ app.controller("anotherController", function ($http, myFactory) {
                 myFactory.Transactions = response.data.Transactions;
 
                 ParseTimeData();
-                ParseChartData(response.data.Transactions);
+                myFactory.SelectedTool = myFactory.Tools[0];
+                ParseChartData(response.data.Transactions, myFactory.SelectedTool);
                 DrawGraph();
             }, function errorCallback(response) {
             }
         );
+        
     };
 
     this.AddTransaction = function (transaction) {
@@ -117,7 +137,7 @@ app.controller("anotherController", function ($http, myFactory) {
                 ParseTimeData();
                 myFactory.TransactionTime = [];
                 myFactory.TransactionPrice = [];
-                ParseChartData(myFactory.Transactions);
+                ParseChartData(myFactory.Transactions, myFactory.SelectedTool);
                 UpdateGraph();
             }, function errorCallbasck(response) {
             }

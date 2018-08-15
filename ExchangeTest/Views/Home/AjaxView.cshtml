@@ -1,7 +1,10 @@
 ﻿<h2 class="text-center my-lg-3">Ajax view</h2>
 <div ng-controller="anotherController as another" ng-init="another.InitApp()">
     <div class="input-group">
-        <select ng-init="another.tool = another.myFactory.Tools[0]" ng-model="another.tool" ng-options="tool.Name for tool in another.myFactory.Tools" class="form-control"></select>
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="toolForChart">Tool for chart</span>
+        </div>
+        <select ng-model="another.myFactory.SelectedTool" ng-options="tool.Name for tool in another.myFactory.Tools track by tool.Id" ng-change="another.ChangeTool(another.myFactory.SelectedTool)" class="form-control" aria-describedby="toolForChart"></select>
     </div>
     <canvas id="myChart2"></canvas>
     <div class="center-block my-5">
@@ -52,8 +55,8 @@
                 <span class="input-group-text" id="seller">Seller</span>
             </div>
             <select ng-model="another.newTransaction.selectedSeller" ng-options="participant.Name for participant in another.myFactory.Participants" class="form-control" aria-describedby="seller"></select>
-            <input type="number" ng-model="another.newTransaction.price" placeholder="Enter exchange price" class="form-control" />
-            <input type="number" ng-model="another.newTransaction.amount" placeholder="Enter exchange amount" class="form-control" />
+            <input type="number" ng-model="another.newTransaction.price" placeholder="Price" class="form-control" />
+            <input type="number" ng-model="another.newTransaction.amount" placeholder="Amount" class="form-control" />
         </div>
         <div class="input-group">
             <input type="button" ng-click="another.AddTransaction(another.newTransaction)" class="form-control btn-success" value="Add transaction" />
