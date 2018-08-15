@@ -312,6 +312,6 @@ C:\Users\w1shl\Dropbox\VisualStudioProjects\Projects\ExchangeRepo\ExchangeTest\o
 C:\Users\w1shl\Dropbox\VisualStudioProjects\Projects\ExchangeRepo\ExchangeTest\obj\Debug\ExchangeTest.csproj.CopyComplete
 C:\Users\w1shl\Dropbox\VisualStudioProjects\Projects\ExchangeRepo\ExchangeTest\obj\Debug\ExchangeTest.dll
 C:\Users\w1shl\Dropbox\VisualStudioProjects\Projects\ExchangeRepo\ExchangeTest\obj\Debug\ExchangeTest.pdb
-C:\Users\w1shl\Dropbox\VisualStudioProjects\Projects\ExchangeRepo\ExchangeTest\obj\Debug\ExchangeTest.csprojAssemblyReference.cache
 c:\Users\Evgen\Dropbox\VisualStudioProjects\Projects\ExchangeTest\ExchangeTest\bin\ru\EntityFramework.SqlServer.resources.dll
 C:\Users\Evgen\Dropbox\VisualStudioProjects\Projects\ExchangeTest\ExchangeTest\obj\Debug\ExchangeTest.csprojAssemblyReference.cache
+C:\Users\w1shl\Dropbox\VisualStudioProjects\Projects\ExchangeRepo\ExchangeTest\obj\Debug\ExchangeTest.csprojAssemblyReference.cache

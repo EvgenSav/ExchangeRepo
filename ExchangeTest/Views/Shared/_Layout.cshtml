@@ -7,7 +7,7 @@
     <title>@ViewBag.Title Exchange</title>
     <link rel="stylesheet" href="~/Scripts/node_modules/bootstrap/dist/css/bootstrap.css" />
 </head>
-<body ng-app="app" ng-controller="navController as nav">
+<body ng-app="app">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Exchange</a>
 
@@ -17,36 +17,18 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item" ng-class="{active: nav.IsActive('/Home/Index')}">
+                <li class="nav-item">
                     <a class="nav-link"  href="/Home/Index">Razor view <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item" ng-class="{active: nav.IsActive('/Home/AjaxView')}">
+                <li class="nav-item">
                     <a class="nav-link"  href="/Home/AjaxView">Ajax view</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Home/Index3">Modify exchanges</a>
+                    <a class="nav-link" href="/Home/ModifyView">Modify exchanges</a>
                 </li>
             </ul>
         </div>
     </nav>
-    @*<nav class="navbar navbar-dark">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink("ExchangeTest", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Домашняя страница", "Index", "Home")</li>
-                        <li>@Html.ActionLink("Ajax View", "Ajax", "Home")</li>
-                    </ul>
-                </div>
-            </div>
-        </nav>*@
     <div class="container body-content">
         @RenderBody()
         <hr />

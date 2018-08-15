@@ -1,5 +1,8 @@
 ﻿<h2 class="text-center my-lg-3">Ajax view</h2>
 <div ng-controller="anotherController as another" ng-init="another.InitApp()">
+    <div class="input-group">
+        <select ng-init="another.tool = another.myFactory.Tools[0]" ng-model="another.tool" ng-options="tool.Name for tool in another.myFactory.Tools" class="form-control"></select>
+    </div>
     <canvas id="myChart2"></canvas>
     <div class="center-block my-5">
         <input type="button" data-target="#toHide2" data-toggle="collapse" class="form-control btn-success" value="Show transactions table" />
@@ -28,7 +31,7 @@
                             <td>{{transaction.Tool.Name}}</td>
                             <td>{{transaction.Price}} {{transaction.Tool.Name}}</td>
                             <td>{{transaction.Amount}} {{transaction.Tool.Name}}</td>
-                            <td>{{transaction.Time}}</td>
+                            <td>{{transaction.TimeF}}</td>
                             <td>{{transaction.Buyer.Name}}</td>
                             <td>{{transaction.Seller.Name}}</td>
                         </tr>
@@ -37,9 +40,18 @@
             </div>
         </div>
         <div class="input-group my-3" ng-model="another.newTransaction">
-            <select ng-model="another.newTransaction.selectedTool" ng-options="tool.Name for tool in another.myFactory.Tools" class="form-control"></select>
-            <select ng-model="another.newTransaction.selectedBuyer" ng-options="participant.Name for participant in another.myFactory.Participants" class="form-control"></select>
-            <select ng-model="another.newTransaction.selectedSeller" ng-options="participant.Name for participant in another.myFactory.Participants" class="form-control"></select>
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="tool">Tool</span>
+            </div>
+            <select ng-model="another.newTransaction.selectedTool" ng-options="tool.Name for tool in another.myFactory.Tools" class="form-control" aria-describedby="tool"></select>
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="buyer">Buyer</span>
+            </div>
+            <select ng-model="another.newTransaction.selectedBuyer" ng-options="participant.Name for participant in another.myFactory.Participants" class="form-control" aria-describedby="buyer"></select>
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="seller">Seller</span>
+            </div>
+            <select ng-model="another.newTransaction.selectedSeller" ng-options="participant.Name for participant in another.myFactory.Participants" class="form-control" aria-describedby="seller"></select>
             <input type="number" ng-model="another.newTransaction.price" placeholder="Enter exchange price" class="form-control" />
             <input type="number" ng-model="another.newTransaction.amount" placeholder="Enter exchange amount" class="form-control" />
         </div>

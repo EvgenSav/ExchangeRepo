@@ -1284,7 +1284,7 @@
     <Content Include="Scripts\node_modules\popper.js\index.js.flow" />
     <Content Include="Scripts\node_modules\popper.js\package.json" />
     <Content Include="Scripts\node_modules\popper.js\README.md" />
-    <Content Include="Views\Home\Modify.cshtml" />
+    <Content Include="Views\Home\ModifyView.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

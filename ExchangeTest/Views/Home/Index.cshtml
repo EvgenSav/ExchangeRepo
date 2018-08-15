@@ -3,7 +3,14 @@
     ViewBag.Title = "Home Page";
 }
 <h2 class="text-center my-lg-3">Razor view</h2>
-<div class="container" ng-controller="mainController as main">
+
+<div class="input-group">
+    @using (Html.BeginForm("SelectTool", "Home")) {
+        @Html.DropDownList("Id", ViewBag.ToolsList as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
+    }
+</div>
+
+<div class="container">
 
     <script>
         var barChartData =
@@ -48,48 +55,7 @@
         <input type="button" data-target="#toHide" data-toggle="collapse" class="form-control btn-success" value="Show transactions table" />
     </div>
 
-
     <div id="toHide" class="collapse">
-        @*<table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Currency name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var tool in ViewBag.Tools) {
-                        <tr>
-                            <th scope="row">@tool.Id</th>
-                            <td>@tool.Name</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>*@
-        @*<div class="input-group">
-                <input type="text" ng-model="main.toolName" placeholder="Currrency name to add" class="form-control" />
-                <input type="button" ng-click="main.AddTool(main.toolName)" class="btn-success form-control" value="Add tool" />
-            </div>*@
-        @*<table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Participant name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var participant in ViewBag.Participants) {
-                        <tr>
-                            <th scope="row">@participant.Id</th>
-                            <td>@participant.Name</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>*@
-        @*<div class="input-group">
-                <input type="text" ng-model="main.participantName" placeholder="Participant name to add" class="form-control" />
-                <input type="button" ng-click="main.AddParticipant(main.participantName)" class="btn-success form-control" value="Add participant" />
-            </div>*@
         <div class="card">
             <div class="card-header bg-info">
                 <h3 class="text-center">Transactions info</h3>

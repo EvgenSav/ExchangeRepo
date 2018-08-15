@@ -1,10 +1,4 @@
 ﻿var app = angular.module("app", []);
-//app.config(['$locationProvider', function ($locationProvider) {
-//    $locationProvider.html5Mode({
-//        enabled: true,
-//        requireBase: false
-//    });
-//}]);
 app.factory("myFactory", function () {
     let transactions;
     return {
@@ -16,53 +10,15 @@ app.factory("myFactory", function () {
     };
 });
 app.controller("mainController", function ($http, myFactory) {
-    let chart;
-    let chartData = {
-        labels: [],
-        datasets: [{
-            label: "Transaction price",
-            //backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: []
-        }]
-    };
-
-
-    DrawGraph = function () {
-        var ctx = document.getElementById('myChart').getContext('2d');
-
-        chart = new Chart(ctx, {
-            // The type of chart we want to create
-            type: 'line',
-            // The data for our dataset
-            data: chartData,
-            // Configuration options go here
-            options: {
-                scales: {
-                    xAxes: [{
-                        type: 'time',
-                        time: {
-                            unit: 'day',
-                            displayFormats: {
-                                day: 'MMM D'
-                            }
-                        }
-                    }]
-                }
-            }
-        });
-        chart.data.datasets[0].data = myFactory.TransactionPrice;
-        chart.data.labels = myFactory.TransactionTime;
-        chart.update();
-    }
-
-    UpdateGraph = function () {
-        chart.data.datasets[0].data = myFactory.TransactionPrice;
-        chart.data.labels = myFactory.TransactionTime;
-        chart.update();
-    }
-    let options = {};
     this.myFactory = myFactory;
+    let ParseTimeData = function () {
+        //adjust datetime like in RazorView
+        for (var i = 0; i < myFactory.Transactions.length; i++) {
+            myFactory.Transactions[i].TimeF = myFactory.Transactions[i].Time;
+            let time = moment(myFactory.Transactions[i].TimeF).format('DD.MM.YYYY HH:DD:SS');
+            myFactory.Transactions[i].TimeF = time;
+        }
+    };
     this.InitApp = function () {
         $http.get(`http://${document.location.host}/Home/GetData`).then(
             function successCallback(response) {
@@ -70,17 +26,7 @@ app.controller("mainController", function ($http, myFactory) {
                 myFactory.Tools = response.data.Tools;
                 myFactory.Participants = response.data.Participants;
                 myFactory.Transactions = response.data.Transactions;
-                //convert datetime to date js using moment
-                for (var i = 0; i < response.data.Transactions.length; i++) {
-                    myFactory.Transactions[i].Time = moment(response.data.Transactions[i].Time).toDate();
-                }
-                //prepare data for chart
-                var arr = myFactory.Transactions;
-                arr.forEach(function (ts, i, arr) {
-                    myFactory.TransactionTime.push(ts.Time);
-                    myFactory.TransactionPrice.push(ts.Price);
-                });
-                DrawGraph();
+                ParseTimeData();
             }, function errorCallback(response) {
             }
         );
@@ -89,6 +35,7 @@ app.controller("mainController", function ($http, myFactory) {
         $http.post(`http://${document.location.host}/Home/AddTool?name=${name}`).then(
             function successCallback(response) {
                 console.log(response.data);
+                myFactory.Tools = response.data;
             }, function errorCallbasck(response) {
             }
         );
@@ -97,29 +44,25 @@ app.controller("mainController", function ($http, myFactory) {
         $http.post(`http://${document.location.host}/Home/AddParticipant?name=${name}`).then(
             function successCallback(response) {
                 console.log(response.data);
+                myFactory.Participants = response.data;
             }, function errorCallbasck(response) {
             }
         );
     };
     this.AddTransaction = function (transaction) {
         let tsData = {
-            ToolId: transaction.selectedTool.Id,
-            BuyerId: transaction.selectedBuyer.Id,
-            SellerId: transaction.selectedSeller.Id,
+            Tool: transaction.selectedTool,
+            Buyer: transaction.selectedBuyer,
+            Seller: transaction.selectedSeller,
             Price: transaction.price,
             Amount: transaction.amount
-        }
+        };
+        console.log(tsData);
         $http.post(`http://${document.location.host}/Home/AddTransaction/`, tsData).then(
             function successCallback(response) {
                 console.log(response.data);
-                myFactory.Transactions[response.data.Id] = response.data;
-                //convert datetime to date js using moment
-                myFactory.Transactions[response.data.Id].Time = moment(response.data.Time).toDate();
-
-                myFactory.TransactionTime.push(myFactory.Transactions[response.data.Id].Time);
-                myFactory.TransactionPrice.push(myFactory.Transactions[response.data.Id].Price);
-
-                UpdateGraph();
+                myFactory.Transactions = response.data;
+                ParseTimeData();
             }, function errorCallbasck(response) {
             }
         );
@@ -127,6 +70,22 @@ app.controller("mainController", function ($http, myFactory) {
 });
 app.controller("anotherController", function ($http, myFactory) {
     this.myFactory = myFactory;
+    let ParseChartData = function (transactions) {
+        transactions.forEach(function (ts, i, transactions) {
+            myFactory.TransactionTime.push(ts.Time);
+            myFactory.TransactionPrice.push(ts.Price);
+        });
+    };
+
+    let ParseTimeData = function () {
+        //adjust datetime like in RazorView
+        for (var i = 0; i < myFactory.Transactions.length; i++) {
+            myFactory.Transactions[i].TimeF = myFactory.Transactions[i].Time;
+            let time = moment(myFactory.Transactions[i].TimeF).format('DD.MM.YYYY HH:DD:SS');
+            myFactory.Transactions[i].TimeF = time;
+        }
+    };
+    
     this.InitApp = function () {
         $http.get(`http://${document.location.host}/Home/GetData`).then(
             function successCallback(response) {
@@ -134,18 +93,33 @@ app.controller("anotherController", function ($http, myFactory) {
                 myFactory.Tools = response.data.Tools;
                 myFactory.Participants = response.data.Participants;
                 myFactory.Transactions = response.data.Transactions;
-                //convert datetime to date js using moment
-                for (var i = 0; i < response.data.Transactions.length; i++) {
-                    myFactory.Transactions[i].Time = moment(response.data.Transactions[i].Time).toDate();
-                }
-                //prepare data for chart
-                var arr = myFactory.Transactions;
-                arr.forEach(function (ts, i, arr) {
-                    myFactory.TransactionTime.push(ts.Time);
-                    myFactory.TransactionPrice.push(ts.Price);
-                });
+
+                ParseTimeData();
+                ParseChartData(response.data.Transactions);
                 DrawGraph();
             }, function errorCallback(response) {
+            }
+        );
+    };
+
+    this.AddTransaction = function (transaction) {
+        let tsData = {
+            Tool: transaction.selectedTool,
+            Buyer: transaction.selectedBuyer,
+            Seller: transaction.selectedSeller,
+            Price: transaction.price,
+            Amount: transaction.amount
+        };
+        $http.post(`http://${document.location.host}/Home/AddTransaction/`, tsData).then(
+            function successCallback(response) {
+                console.log(response.data);
+                myFactory.Transactions = response.data;
+                ParseTimeData();
+                myFactory.TransactionTime = [];
+                myFactory.TransactionPrice = [];
+                ParseChartData(myFactory.Transactions);
+                UpdateGraph();
+            }, function errorCallbasck(response) {
             }
         );
     };
@@ -159,9 +133,9 @@ app.controller("anotherController", function ($http, myFactory) {
             data: []
         }]
     };
+    let options = {};
 
-
-    DrawGraph = function () {
+    let DrawGraph = function () {
         var ctx = document.getElementById('myChart2').getContext('2d');
 
         chart = new Chart(ctx, {
@@ -187,42 +161,10 @@ app.controller("anotherController", function ($http, myFactory) {
         chart.data.datasets[0].data = myFactory.TransactionPrice;
         chart.data.labels = myFactory.TransactionTime;
         chart.update();
-    }
-
-    this.AddTransaction = function (transaction) {
-        let tsData = {
-            Tool: transaction.selectedTool,
-            Buyer: transaction.selectedBuyer,
-            Seller: transaction.selectedSeller,
-            Price: transaction.price,
-            Amount: transaction.amount
-        }
-        $http.post(`http://${document.location.host}/Home/AddTransaction/`, tsData).then(
-            function successCallback(response) {
-                console.log(response.data);
-                myFactory.Transactions[response.data.Id] = response.data;
-                //convert datetime to date js using moment
-                myFactory.Transactions[response.data.Id].Time = moment(response.data.Time).toDate();
-
-                myFactory.TransactionTime.push(myFactory.Transactions[response.data.Id].Time);
-                myFactory.TransactionPrice.push(myFactory.Transactions[response.data.Id].Price);
-
-                UpdateGraph();
-            }, function errorCallbasck(response) {
-            }
-        );
     };
-
-    UpdateGraph = function () {
+    let UpdateGraph = function () {
         chart.data.datasets[0].data = myFactory.TransactionPrice;
         chart.data.labels = myFactory.TransactionTime;
         chart.update();
-    }
-    let options = {};
-});
-app.controller("navController", function (myFactory, $location) {
-    this.myFactory = myFactory;
-    this.IsActive = function (loc) {
-        return loc === $location.path;
-    }
+    };
 });
